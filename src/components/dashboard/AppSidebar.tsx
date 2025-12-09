@@ -1,11 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  PlusCircle, 
-  History, 
-  Settings, 
-  Sun, 
-  Moon, 
-  ChevronLeft, 
+import {
+  PlusCircle,
+  History,
+  Settings,
+  Sun,
+  Moon,
+  ChevronLeft,
   ChevronRight,
   Image,
   Clock
@@ -15,6 +15,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 interface AppSidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
+  onNewCompare: () => void;
 }
 
 const historyItems = [
@@ -24,9 +25,8 @@ const historyItems = [
   { id: 4, name: 'Architecture Set', time: '2 days ago' },
 ];
 
-export function AppSidebar({ isCollapsed, onToggle }: AppSidebarProps) {
-  const { theme, toggleTheme } = useTheme();
-  const isDarkMode = theme === 'dark';
+export function AppSidebar({ isCollapsed, onToggle, onNewCompare }: AppSidebarProps) {
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   return (
     <motion.aside
@@ -46,11 +46,11 @@ export function AppSidebar({ isCollapsed, onToggle }: AppSidebarProps) {
       {/* Main Actions */}
       <div className="p-4 space-y-2">
         <motion.button
+          onClick={onNewCompare}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-medium transition-all ${
-            isCollapsed ? 'justify-center' : ''
-          }`}
+          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-medium transition-all ${isCollapsed ? 'justify-center' : ''
+            }`}
         >
           <PlusCircle className="w-5 h-5 shrink-0" />
           <AnimatePresence>
@@ -80,7 +80,7 @@ export function AppSidebar({ isCollapsed, onToggle }: AppSidebarProps) {
                 <History className="w-4 h-4" />
                 <span>Recent History</span>
               </div>
-              
+
               <div className="space-y-2">
                 {historyItems.map((item) => (
                   <motion.button
@@ -119,9 +119,8 @@ export function AppSidebar({ isCollapsed, onToggle }: AppSidebarProps) {
       {/* Bottom Actions */}
       <div className="p-4 border-t border-sidebar-border space-y-2">
         <button
-          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-accent transition-colors ${
-            isCollapsed ? 'justify-center' : ''
-          }`}
+          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-accent transition-colors ${isCollapsed ? 'justify-center' : ''
+            }`}
         >
           <Settings className="w-5 h-5 text-muted-foreground shrink-0" />
           <AnimatePresence>
@@ -140,9 +139,8 @@ export function AppSidebar({ isCollapsed, onToggle }: AppSidebarProps) {
 
         <button
           onClick={toggleTheme}
-          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-accent transition-colors ${
-            isCollapsed ? 'justify-center' : ''
-          }`}
+          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-accent transition-colors ${isCollapsed ? 'justify-center' : ''
+            }`}
         >
           {isDarkMode ? (
             <Moon className="w-5 h-5 text-muted-foreground shrink-0" />

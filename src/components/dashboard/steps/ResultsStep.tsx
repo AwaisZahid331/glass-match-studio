@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Download, FileJson, Eye, Flame, Columns, Maximize2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Download, FileJson, Eye, Flame, Columns, Maximize2, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { ImageGrid } from '@/components/shared/ImageGrid';
+import { ImageComparisonViewer } from '@/components/shared/ImageComparisonViewer';
+import { useCompare } from '@/contexts/CompareContext';
 
 interface ResultsStepProps {
   onNext: () => void;
@@ -10,22 +13,15 @@ interface ResultsStepProps {
 
 const tabs = [
   { id: 'lines', name: 'Match Lines', icon: Eye },
+  { id: 'images', name: 'All Images', icon: ImageIcon },
   { id: 'heatmap', name: 'Heatmap', icon: Flame },
   { id: 'sidebyside', name: 'Side-by-Side', icon: Columns },
 ];
 
 export function ResultsStep({ onNext, onBack }: ResultsStepProps) {
+  const { images } = useCompare();
   const [activeTab, setActiveTab] = useState('lines');
-
-  // Dummy keypoints for visualization
-  const keypoints = [
-    { x1: 20, y1: 30, x2: 75, y2: 35 },
-    { x1: 35, y1: 45, x2: 60, y2: 50 },
-    { x1: 50, y1: 25, x2: 45, y2: 30 },
-    { x1: 25, y1: 60, x2: 70, y2: 65 },
-    { x1: 45, y1: 70, x2: 55, y2: 75 },
-    { x1: 60, y1: 40, x2: 40, y2: 45 },
-  ];
+  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <motion.div
@@ -38,15 +34,15 @@ export function ResultsStep({ onNext, onBack }: ResultsStepProps) {
       <div className="mb-6">
         <h1 className="text-2xl font-display font-bold mb-2">Results Preview</h1>
         <p className="text-muted-foreground">
-          Review the matching results and keypoint analysis
+          Review the matching results and keypoint analysis between images
         </p>
       </div>
 
       <div className="flex-1 flex gap-6 overflow-hidden">
         {/* Main Preview Area */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-w-0">
           {/* Tabs */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -66,59 +62,20 @@ export function ResultsStep({ onNext, onBack }: ResultsStepProps) {
           {/* Preview Content */}
           <div className="flex-1 glass-card p-4 relative overflow-hidden">
             {activeTab === 'lines' && (
-              <div className="h-full flex gap-4">
-                {/* Image 1 */}
-                <div className="flex-1 relative bg-muted/50 rounded-xl overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-                    <div className="text-center">
-                      <div className="w-20 h-20 mx-auto mb-3 rounded-2xl bg-primary/10 flex items-center justify-center">
-                        <Eye className="w-10 h-10 text-primary/50" />
-                      </div>
-                      <span className="text-sm">Source Image</span>
-                    </div>
-                  </div>
-                  
-                  {/* Keypoint dots */}
-                  {keypoints.map((kp, i) => (
-                    <motion.div
-                      key={`kp1-${i}`}
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: i * 0.1 }}
-                      className="absolute w-3 h-3 rounded-full bg-primary shadow-lg shadow-primary/50"
-                      style={{ left: `${kp.x1}%`, top: `${kp.y1}%` }}
-                    />
-                  ))}
-                </div>
+              <div className="h-full">
+                <ImageComparisonViewer />
+              </div>
+            )}
 
-                {/* Connection Lines (SVG overlay would go here in real implementation) */}
-                <div className="w-16 flex items-center justify-center">
-                  <div className="h-full w-px bg-gradient-to-b from-primary via-secondary to-primary opacity-30" />
-                </div>
-
-                {/* Image 2 */}
-                <div className="flex-1 relative bg-muted/50 rounded-xl overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-                    <div className="text-center">
-                      <div className="w-20 h-20 mx-auto mb-3 rounded-2xl bg-secondary/10 flex items-center justify-center">
-                        <Eye className="w-10 h-10 text-secondary/50" />
-                      </div>
-                      <span className="text-sm">Target Image</span>
-                    </div>
-                  </div>
-                  
-                  {/* Keypoint dots */}
-                  {keypoints.map((kp, i) => (
-                    <motion.div
-                      key={`kp2-${i}`}
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: i * 0.1 + 0.3 }}
-                      className="absolute w-3 h-3 rounded-full bg-secondary shadow-lg shadow-secondary/50"
-                      style={{ left: `${kp.x2}%`, top: `${kp.y2}%` }}
-                    />
-                  ))}
-                </div>
+            {activeTab === 'images' && (
+              <div className="h-full overflow-auto">
+                <ImageGrid
+                  images={images}
+                  readonly
+                  imagesPerPage={6}
+                  currentPage={currentPage}
+                  onPageChange={setCurrentPage}
+                />
               </div>
             )}
 
@@ -136,17 +93,25 @@ export function ResultsStep({ onNext, onBack }: ResultsStepProps) {
 
             {activeTab === 'sidebyside' && (
               <div className="h-full grid grid-cols-2 gap-4">
-                <div className="bg-muted/50 rounded-xl flex items-center justify-center">
-                  <div className="text-center">
-                    <Columns className="w-12 h-12 mx-auto mb-2 text-primary/50" />
-                    <span className="text-sm text-muted-foreground">Source</span>
-                  </div>
+                <div className="bg-muted/50 rounded-xl overflow-hidden flex items-center justify-center">
+                  {images[0] ? (
+                    <img src={images[0].url} alt="Source" className="w-full h-full object-contain" />
+                  ) : (
+                    <div className="text-center">
+                      <Columns className="w-12 h-12 mx-auto mb-2 text-primary/50" />
+                      <span className="text-sm text-muted-foreground">Source</span>
+                    </div>
+                  )}
                 </div>
-                <div className="bg-muted/50 rounded-xl flex items-center justify-center">
-                  <div className="text-center">
-                    <Columns className="w-12 h-12 mx-auto mb-2 text-secondary/50" />
-                    <span className="text-sm text-muted-foreground">Target</span>
-                  </div>
+                <div className="bg-muted/50 rounded-xl overflow-hidden flex items-center justify-center">
+                  {images[1] ? (
+                    <img src={images[1].url} alt="Target" className="w-full h-full object-contain" />
+                  ) : (
+                    <div className="text-center">
+                      <Columns className="w-12 h-12 mx-auto mb-2 text-secondary/50" />
+                      <span className="text-sm text-muted-foreground">Target</span>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -181,10 +146,10 @@ export function ResultsStep({ onNext, onBack }: ResultsStepProps) {
           <div className="glass-card p-6">
             <h3 className="text-sm text-muted-foreground mb-2">Matched Points</h3>
             <div className="flex items-end gap-2">
-              <span className="text-4xl font-display font-bold text-secondary neon-text-purple">247</span>
-              <span className="text-lg text-muted-foreground mb-1">/ 312</span>
+              <span className="text-4xl font-display font-bold text-secondary neon-text-purple">12</span>
+              <span className="text-lg text-muted-foreground mb-1">/ 15</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">79.2% keypoints matched</p>
+            <p className="text-xs text-muted-foreground mt-2">80% keypoints matched</p>
           </div>
 
           {/* Confidence */}
