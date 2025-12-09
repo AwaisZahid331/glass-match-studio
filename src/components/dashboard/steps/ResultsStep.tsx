@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Download, FileJson, Eye, Flame, Columns, Maximize2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Download, FileJson, Eye, Flame, Columns, Maximize2, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { ImageGrid } from '@/components/shared/ImageGrid';
+import { useCompare } from '@/contexts/CompareContext';
 
 interface ResultsStepProps {
   onNext: () => void;
@@ -9,13 +11,16 @@ interface ResultsStepProps {
 }
 
 const tabs = [
+  { id: 'images', name: 'Compared Images', icon: ImageIcon },
   { id: 'lines', name: 'Match Lines', icon: Eye },
   { id: 'heatmap', name: 'Heatmap', icon: Flame },
   { id: 'sidebyside', name: 'Side-by-Side', icon: Columns },
 ];
 
 export function ResultsStep({ onNext, onBack }: ResultsStepProps) {
-  const [activeTab, setActiveTab] = useState('lines');
+  const { images } = useCompare();
+  const [activeTab, setActiveTab] = useState('images');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Dummy keypoints for visualization
   const keypoints = [
@@ -65,6 +70,18 @@ export function ResultsStep({ onNext, onBack }: ResultsStepProps) {
 
           {/* Preview Content */}
           <div className="flex-1 glass-card p-4 relative overflow-hidden">
+            {activeTab === 'images' && (
+              <div className="h-full overflow-auto">
+                <ImageGrid
+                  images={images}
+                  readonly
+                  imagesPerPage={6}
+                  currentPage={currentPage}
+                  onPageChange={setCurrentPage}
+                />
+              </div>
+            )}
+
             {activeTab === 'lines' && (
               <div className="h-full flex gap-4">
                 {/* Image 1 */}
