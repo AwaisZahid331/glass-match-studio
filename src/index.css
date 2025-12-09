@@ -6,6 +6,64 @@
 
 @layer base {
   :root {
+    /* Light mode theme */
+    --background: 0 0% 100%;
+    --foreground: 230 25% 10%;
+
+    --card: 0 0% 98%;
+    --card-foreground: 230 25% 10%;
+
+    --popover: 0 0% 98%;
+    --popover-foreground: 230 25% 10%;
+
+    /* Neon cyan primary */
+    --primary: 185 100% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Purple accent */
+    --secondary: 270 70% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 230 10% 95%;
+    --muted-foreground: 215 15% 45%;
+
+    --accent: 270 70% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 230 15% 85%;
+    --input: 230 10% 95%;
+    --ring: 185 100% 40%;
+
+    --radius: 0.75rem;
+
+    /* Custom neon colors */
+    --neon-cyan: 185 100% 40%;
+    --neon-purple: 270 70% 50%;
+    --neon-pink: 330 70% 50%;
+    
+    /* Glass effect */
+    --glass-bg: 0 0% 98%;
+    --glass-border: 230 15% 85%;
+    
+    /* Gradients */
+    --gradient-neon: linear-gradient(135deg, hsl(var(--neon-cyan)), hsl(var(--neon-purple)));
+    --gradient-glass: linear-gradient(135deg, hsl(0 0% 100% / 0.8), hsl(0 0% 98% / 0.6));
+    --gradient-dark: linear-gradient(180deg, hsl(0 0% 98%), hsl(0 0% 95%));
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 230 25% 10%;
+    --sidebar-primary: 185 100% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 230 10% 95%;
+    --sidebar-accent-foreground: 230 25% 10%;
+    --sidebar-border: 230 15% 85%;
+    --sidebar-ring: 185 100% 40%;
+  }
+
+  .dark {
     /* Dark cyberpunk theme */
     --background: 230 25% 5%;
     --foreground: 210 40% 98%;
@@ -30,14 +88,12 @@
     --accent: 270 80% 60%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 230 20% 20%;
     --input: 230 20% 15%;
     --ring: 185 100% 50%;
-
-    --radius: 0.75rem;
 
     /* Custom neon colors */
     --neon-cyan: 185 100% 50%;
@@ -61,28 +117,6 @@
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 230 20% 15%;
     --sidebar-ring: 185 100% 50%;
-  }
-
-  .dark {
-    --background: 230 25% 5%;
-    --foreground: 210 40% 98%;
-    --card: 230 25% 8%;
-    --card-foreground: 210 40% 98%;
-    --popover: 230 25% 8%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 185 100% 50%;
-    --primary-foreground: 230 25% 5%;
-    --secondary: 270 80% 60%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 230 20% 15%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 270 80% 60%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 230 20% 20%;
-    --input: 230 20% 15%;
-    --ring: 185 100% 50%;
   }
 }
 

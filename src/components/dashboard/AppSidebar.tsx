@@ -10,7 +10,7 @@ import {
   Image,
   Clock
 } from 'lucide-react';
-import { useState } from 'react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface AppSidebarProps {
   isCollapsed: boolean;
@@ -25,7 +25,8 @@ const historyItems = [
 ];
 
 export function AppSidebar({ isCollapsed, onToggle }: AppSidebarProps) {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const { theme, toggleTheme } = useTheme();
+  const isDarkMode = theme === 'dark';
 
   return (
     <motion.aside
@@ -138,7 +139,7 @@ export function AppSidebar({ isCollapsed, onToggle }: AppSidebarProps) {
         </button>
 
         <button
-          onClick={() => setIsDarkMode(!isDarkMode)}
+          onClick={toggleTheme}
           className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-accent transition-colors ${
             isCollapsed ? 'justify-center' : ''
           }`}
