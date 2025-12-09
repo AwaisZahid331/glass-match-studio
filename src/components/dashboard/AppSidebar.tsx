@@ -15,6 +15,7 @@ import { useState } from 'react';
 interface AppSidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
+  onNewCompare: () => void;
 }
 
 const historyItems = [
@@ -24,7 +25,7 @@ const historyItems = [
   { id: 4, name: 'Architecture Set', time: '2 days ago' },
 ];
 
-export function AppSidebar({ isCollapsed, onToggle }: AppSidebarProps) {
+export function AppSidebar({ isCollapsed, onToggle, onNewCompare }: AppSidebarProps) {
   const [isDarkMode, setIsDarkMode] = useState(true);
 
   return (
@@ -45,6 +46,7 @@ export function AppSidebar({ isCollapsed, onToggle }: AppSidebarProps) {
       {/* Main Actions */}
       <div className="p-4 space-y-2">
         <motion.button
+          onClick={onNewCompare}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-medium transition-all ${
